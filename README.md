@@ -1,0 +1,256 @@
+# Spreadsheet Analyst for Open WebUI
+
+**Deterministic Excel & CSV analysis inside Open WebUI — the model narrates, the code computes.**
+
+Turn any uploaded spreadsheet into a conversation: ask for totals, group‑bys, pivot tables,
+trends, outliers, de‑duplication, or a custom transform, and get answers where **every number is
+computed by pandas and traceable to the file** — never guessed, estimated, or invented by the
+language model.
+
+![License: MIT](https://img.shields.io/badge/license-MIT-blue)
+![Python](https://img.shields.io/badge/python-3.11%2B-blue)
+![Open WebUI](https://img.shields.io/badge/Open%20WebUI-Tool%20%2B%20Filter-black)
+![pandas](https://img.shields.io/badge/engine-pandas-150458)
+![Status](https://img.shields.io/badge/status-stable-brightgreen)
+
+---
+
+## Why this exists
+
+Large language models are excellent at *reading* and *explaining* data, but unreliable at
+*arithmetic* on it. Ask a model to "sum this column" or "which region is largest" directly from a
+pasted table and it will often be confidently wrong — and worse, its mistakes look exactly like its
+correct answers.
+
+**Spreadsheet Analyst removes the model from the numbers entirely:**
+
+1. The uploaded spreadsheet is **kept out of the prompt** (the companion filter bypasses retrieval),
+   so the model cannot "read numbers off the page" and cannot leak raw rows.
+2. Every statistic, group, pivot, trend and row‑level value is produced by a **deterministic pandas
+   engine** and returned with **provenance** (which columns, how many rows, the exact operation).
+3. An optional **output audit** re‑checks the final answer: any figure that does not trace back to a
+   tool result is flagged, so an unverified number fails safe instead of being presented as fact.
+
+The result is a spreadsheet assistant you can trust with real reporting.
+
+---
+
+## Features
+
+- **Works on real uploads** — `.xlsx`, `.xls`, `.xlsm`, `.csv`, `.tsv`. The engine loads the actual
+  file the user attached (owner‑checked, multi‑user safe), auto‑detects the data sheet, and finds the
+  real header row even when a title/banner precedes the data.
+- **Schema‑first, zero domain assumptions** — every column is classified into a universal role
+  (`measure`, `dimension`, `temporal`, `identifier`, `text`, `boolean`) with dtype, null counts,
+  distinct counts and sample values. No hard‑coded column names, no business vocabulary.
+- **A full analysis vocabulary** — overview, aggregate, group‑by, top‑N, pivot tables, value counts,
+  descriptive statistics, time series, anomaly detection, duplicate detection, missing‑value report,
+  period‑over‑period and segment comparison.
+- **A safe composable transform pipeline** — chain `select · filter · derive · group · sort · limit ·
+  distinct · window · pivot · unpivot` for any multi‑step workflow (computed columns, classifications,
+  running totals, shares, date math, filtered listings).
+- **Locale‑tolerant numbers** — currency symbols, thousands separators, parenthesis‑negatives and
+  percentages are parsed correctly; US and European decimal styles are both handled.
+- **Provenance on every result** — each answer carries the columns used, rows processed, and a short
+  description of the exact operation, so results are auditable and reproducible.
+- **Verified‑numbers guarantee** — with the companion filter enabled, the model is contractually
+  constrained to report only tool‑computed figures, and an automatic audit backs that up.
+
+---
+
+## How it works
+
+The project ships **two Open WebUI plugins** that work together:
+
+| Component | Type | Role |
+| --- | --- | --- |
+| `spreadsheet_analyst.py` | **Tool** (required) | The deterministic pandas engine. Exposes two functions the model calls: `inspect_spreadsheet` (schema) and `analyze_spreadsheet` (all operations). |
+| `spreadsheet_router.py` | **Filter** (recommended) | Detects a spreadsheet upload, removes it from retrieval, enables the tool + native function‑calling for that turn, injects the "numbers only from the tool" contract, and audits the final answer. |
+
+```mermaid
+flowchart TB
+    U["User uploads a spreadsheet + asks a question"]
+    subgraph F["Spreadsheet Router (filter)"]
+        direction TB
+        R["Bypass retrieval - the file never enters the prompt"]
+        E["Enable the tool + native function-calling"]
+        C["Inject the verified-numbers contract"]
+    end
+    subgraph T["Spreadsheet Analyst (tool)"]
+        direction TB
+        I["inspect_spreadsheet - real schema and column roles"]
+        A["analyze_spreadsheet - deterministic pandas operation"]
+        P["Executed result + provenance"]
+    end
+    M["Language model - narrates only from verified numbers"]
+    AU["Output audit - flag any figure not backed by a tool result"]
+    U --> F --> M
+    M -->|calls| T
+    T -->|verified JSON| M
+    M --> AU
+```
+
+The tool is fully usable on its own; the filter makes it automatic and adds the privacy and
+anti‑hallucination guarantees.
+
+---
+
+## Installation
+
+### Option A — Open WebUI Community (recommended)
+
+1. Open the tool's Community page (see the repository description for the link).
+2. Click **Get** / **Import to WebUI** and select your Open WebUI instance.
+3. In Open WebUI, go to **Workspace → Tools** and enable **Spreadsheet Analyst** for the models you use.
+4. *(Recommended)* Repeat for the **Spreadsheet Router** filter under **Workspace → Functions**.
+
+### Option B — Manual import
+
+1. In Open WebUI, go to **Workspace → Tools → +** (Create Tool), paste the contents of
+   [`spreadsheet_analyst.py`](spreadsheet_analyst.py), and save. Give it the id **`spreadsheet_analyst`**.
+2. *(Recommended)* Go to **Workspace → Functions → +**, paste
+   [`spreadsheet_router.py`](spreadsheet_router.py), and save.
+3. Enable the tool for your models, and enable the function globally (or per‑model).
+
+**Requirements:** `pandas`, `numpy`, `openpyxl` (declared in the tool header; Open WebUI installs
+missing packages automatically). Open WebUI **0.5.0+**.
+
+> **Tip — native function calling.** The engine relies on the model actually *calling* the tool.
+> The router enables `function_calling: native` automatically for spreadsheet chats. If you use the
+> tool **without** the router, set your model's **Function Calling** to **Native** in its advanced
+> parameters, and use a model that supports tool calling well.
+
+See [`docs/installation.md`](docs/installation.md) for a detailed walkthrough.
+
+---
+
+## Usage
+
+Attach a spreadsheet to a chat and ask in plain language. A few examples:
+
+- *"Give me an overview of this file."*
+- *"Total revenue by region, and each region's share of the total."*
+- *"Top 5 products by units sold."*
+- *"Pivot revenue by region (rows) and category (columns)."*
+- *"Monthly revenue trend for 2025, and the month‑over‑month change."*
+- *"Flag revenue outliers and tell me how many are in each region."*
+- *"Are there duplicate orders? Which columns have missing values?"*
+- *"List the top 5 orders over 20 units with a net‑of‑discount column, highest first."*
+
+More prompts, with the operation each one maps to, are in [`docs/examples.md`](docs/examples.md).
+
+---
+
+## Screenshots & demos
+
+Every demo below runs on the bundled generic sample data
+([`examples/sample_sales.csv`](examples/sample_sales.csv)) — attach the file and paste the prompt.
+Captured images of real Open WebUI usage live in
+[`assets/screenshots/`](assets/screenshots/).
+
+| Demo | Prompt to reproduce |
+| --- | --- |
+| **File overview & schema** | *"Give me an overview of this file: the schema, the key numbers, and any data‑quality issues."* |
+| **Group‑by with shares** | *"Show total revenue by region, with each region's share of the total, highest first."* |
+| **Pivot table** | *"Build a pivot table of total revenue with regions as rows and product categories as columns."* |
+| **Row‑level transform table** | *"List the top 5 orders over 20 units, add a net‑of‑discount column, and sort by it."* |
+| **Anomaly detection** | *"Detect revenue outliers and tell me how many fall in each region."* |
+| **Data quality** | *"Are there duplicate orders, and which columns have missing values?"* |
+
+---
+
+## Supported operations
+
+`analyze_spreadsheet` accepts an `operation` plus typed parameters. Full reference in
+[`docs/usage.md`](docs/usage.md).
+
+| Operation | What it returns |
+| --- | --- |
+| `overview` | Shape, roles, nulls, duplicates, per‑measure stats, top dimension values, date range |
+| `aggregate` | One statistic of a measure over the whole file (optionally multi‑stat) |
+| `group_aggregate` | A measure aggregated per group, with count and % of total |
+| `top_n` | The top *n* groups by a chosen aggregate, with a returned‑subtotal summary |
+| `pivot` | A measure pivoted by rows × columns |
+| `value_counts` | Frequency (and %) of each value in a column |
+| `describe` | Descriptive statistics for chosen columns (or all measures) |
+| `time_series` | A measure resampled by a date column (D/W/M/Q/Y) |
+| `anomalies` | Outliers by IQR / z‑score / percent‑above‑mean, with a breakdown per dimension |
+| `duplicates` | Duplicate full rows, or duplicates by a key subset |
+| `missing` | Null counts per column |
+| `compare` | Period‑over‑period change, or segment comparison across a dimension |
+| `transform` | A safe composable pipeline for any custom multi‑step workflow |
+
+---
+
+## Security considerations
+
+- **No arbitrary code execution.** The transform pipeline uses a *restricted expression grammar*
+  parsed to an AST allow‑list — column references, literals, arithmetic, comparisons, boolean logic
+  and a fixed set of whitelisted functions only. Attributes, imports, and non‑whitelisted calls are
+  rejected. It is **not** `eval`/`exec` and cannot run Python.
+- **Owner‑checked file access.** The tool resolves a file only through Open WebUI's file model for the
+  requesting user, so one user cannot analyze another user's upload.
+- **Data stays out of the prompt.** With the router enabled, spreadsheet contents are removed from the
+  retrieval path — raw rows are never placed into the model's context or logged as prompt text.
+- **Bounded work.** File size (`max_cells`) and returned rows (`max_return_rows`) are capped by valves;
+  large results are summarized and flagged `truncated: true` rather than silently dropped.
+
+Details in [`docs/security.md`](docs/security.md).
+
+---
+
+## Limitations
+
+- **Tool‑calling models only.** The model must reliably call tools (native function calling). Weak
+  tool‑callers may skip the tool and should not be used for numeric work.
+- **One table per sheet.** The engine reads a single rectangular table per sheet (auto‑detecting the
+  header). Multi‑table sheets, merged‑cell report layouts and pivot‑cache sheets are out of scope.
+- **In‑memory.** Files are loaded into memory; very large workbooks are rejected by the `max_cells`
+  valve rather than streamed.
+- **The tool does not draw charts.** It returns verified data (including time‑series and pivots);
+  any visualization is rendered by the model/UI from that verified data, not by the tool.
+- **Type inference is heuristic.** Column roles are inferred from the data; ambiguous columns can be
+  overridden by naming them explicitly in your request.
+
+---
+
+## Repository layout
+
+```
+openwebui-spreadsheet-analyst/
+├── spreadsheet_analyst.py     # the Tool (deterministic pandas engine)
+├── spreadsheet_router.py      # the Filter (auto-activation, RAG bypass, audit)
+├── README.md
+├── LICENSE                    # MIT
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── requirements.txt           # for local development / testing
+├── docs/
+│   ├── installation.md
+│   ├── usage.md
+│   ├── architecture.md
+│   ├── security.md
+│   └── examples.md
+├── examples/
+│   ├── sample_sales.csv       # generic sample data used in the screenshots
+│   ├── sample_sales.xlsx
+│   └── generate_samples.py    # regenerates the sample data deterministically
+├── tests/
+│   └── test_spreadsheet_analyst.py
+└── assets/
+    └── screenshots/
+```
+
+---
+
+## Contributing
+
+Issues and pull requests are welcome. Please read [`CONTRIBUTING.md`](CONTRIBUTING.md) first.
+
+## License
+
+Released under the [MIT License](LICENSE).
+
+## Author
+
+**Abdulrahman Almehmadi**

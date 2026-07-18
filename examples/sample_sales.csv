@@ -1,0 +1,229 @@
+Order ID,Order Date,Region,Country,Product,Category,Sales Rep,Units,Unit Price,Discount,Revenue,Status
+ORD-1000,2024-01-08,North,Canada,Laptop,Hardware,B. Okafor,18,1200,0.0,21600.0,Completed
+ORD-1001,2024-01-02,Central,France,Monitor,Hardware,A. Silva,38,300,0.05,10830.0,Completed
+ORD-1002,2024-01-01,South,Brazil,Mouse,Accessories,E. Rossi,33,25,0.1,742.5,Completed
+ORD-1003,2024-01-19,Central,France,Webcam,Accessories,C. Nakamura,15,70,0.05,997.5,Completed
+ORD-1004,2024-01-05,South,Brazil,Webcam,Accessories,B. Okafor,22,70,0.0,1540.0,Completed
+ORD-1005,2024-01-12,,Canada,Monitor,Hardware,C. Nakamura,25,300,0.0,7500.0,Refunded
+ORD-1006,2024-01-04,East,Japan,Laptop,Hardware,D. Muller,30,1200,0.1,32400.0,Completed
+ORD-1007,2024-01-19,Central,France,Desk Chair,Furniture,B. Okafor,40,180,0.0,7200.0,Completed
+ORD-1008,2024-01-28,North,Canada,Mouse,Accessories,B. Okafor,19,25,0.0,475.0,Completed
+ORD-1009,2024-01-27,West,Germany,Desk Chair,Furniture,,30,180,0.15,4590.0,Completed
+ORD-1010,2024-01-09,East,Japan,Standing Desk,Furniture,F. Haddad,14,520,0.15,6188.0,Completed
+ORD-1011,2024-01-08,Central,France,Keyboard,Accessories,B. Okafor,35,45,0.15,1338.75,Pending
+ORD-1012,2024-02-08,East,Japan,Mouse,Accessories,A. Silva,21,25,0.0,525.0,Completed
+ORD-1013,2024-02-19,West,Germany,Desk Chair,Furniture,F. Haddad,5,180,0.0,900.0,Completed
+ORD-1014,2024-02-15,South,Brazil,Docking Station,Hardware,B. Okafor,26,210,0.15,4641.0,Completed
+ORD-1015,2024-02-09,South,Brazil,Mouse,Accessories,F. Haddad,36,25,0.1,810.0,Refunded
+ORD-1016,2024-02-05,West,Germany,Webcam,Accessories,E. Rossi,24,70,0.0,1680.0,Pending
+ORD-1017,2024-02-21,North,Canada,Laptop,Hardware,B. Okafor,8,1200,0.0,9600.0,Pending
+ORD-1018,2024-02-20,Central,France,Monitor,Hardware,D. Muller,25,300,0.05,7125.0,Refunded
+ORD-1019,2024-02-18,East,Japan,Laptop,Hardware,C. Nakamura,8,1200,0.15,8160.0,Completed
+ORD-1020,2024-02-15,North,Canada,Desk Chair,Furniture,A. Silva,28,180,0.0,250000.0,Completed
+ORD-1021,2024-02-28,Central,France,Keyboard,Accessories,F. Haddad,33,45,0.0,1485.0,Completed
+ORD-1022,2024-03-25,Central,France,Mouse,Accessories,B. Okafor,10,25,0.0,250.0,Refunded
+ORD-1023,2024-03-16,Central,France,Laptop,Hardware,A. Silva,39,1200,0.0,46800.0,Completed
+ORD-1024,2024-03-08,East,Japan,Desk Chair,Furniture,E. Rossi,16,180,0.0,2880.0,Completed
+ORD-1025,2024-03-25,North,Canada,Docking Station,Hardware,B. Okafor,5,210,0.1,945.0,Completed
+ORD-1026,2024-03-28,West,Germany,Keyboard,Accessories,E. Rossi,17,45,0.1,688.5,Pending
+ORD-1027,2024-03-22,South,Brazil,Mouse,Accessories,F. Haddad,20,25,0.05,475.0,Completed
+ORD-1028,2024-03-08,West,Germany,Docking Station,Hardware,A. Silva,8,210,0.0,1680.0,Completed
+ORD-1029,2024-03-01,North,Canada,Mouse,Accessories,A. Silva,38,25,0.0,950.0,Completed
+ORD-1030,2024-03-03,South,Brazil,Monitor,Hardware,E. Rossi,3,300,0.0,900.0,Completed
+ORD-1031,2024-03-05,East,Japan,Docking Station,Hardware,F. Haddad,14,210,0.1,2646.0,Refunded
+ORD-1032,2024-03-26,Central,France,Docking Station,Hardware,D. Muller,16,210,0.05,3192.0,Completed
+ORD-1033,2024-03-14,North,Canada,Monitor,Hardware,D. Muller,28,300,0.0,8400.0,Pending
+ORD-1034,2024-04-24,North,Canada,Monitor,Hardware,C. Nakamura,4,300,0.05,1140.0,Completed
+ORD-1035,2024-04-15,South,Brazil,Mouse,Accessories,B. Okafor,13,25,0.1,292.5,Pending
+ORD-1036,2024-04-28,South,Brazil,Desk Chair,Furniture,A. Silva,30,180,0.0,5400.0,Pending
+ORD-1037,2024-04-18,Central,France,Monitor,Hardware,A. Silva,4,300,0.15,1020.0,Completed
+ORD-1038,2024-04-16,South,Brazil,Keyboard,Accessories,B. Okafor,27,45,0.05,1154.25,Pending
+ORD-1039,2024-04-13,North,Canada,Keyboard,Accessories,C. Nakamura,25,45,0.0,1125.0,Pending
+ORD-1040,2024-04-23,East,Japan,Webcam,Accessories,D. Muller,36,70,0.15,2142.0,Completed
+ORD-1041,2024-04-19,South,Brazil,Desk Chair,Furniture,F. Haddad,14,180,0.0,2520.0,Refunded
+ORD-1042,2024-04-19,North,Canada,Standing Desk,Furniture,D. Muller,4,520,0.0,2080.0,Refunded
+ORD-1043,2024-04-03,Central,France,Keyboard,Accessories,B. Okafor,4,45,0.1,162.0,Completed
+ORD-1044,2024-04-04,Central,France,Monitor,Hardware,E. Rossi,16,300,0.05,4560.0,Completed
+ORD-1045,2024-04-14,Central,France,Laptop,Hardware,F. Haddad,40,1200,0.0,48000.0,Refunded
+ORD-1046,2024-05-22,Central,France,Standing Desk,Furniture,F. Haddad,17,520,0.0,8840.0,Completed
+ORD-1047,2024-05-22,South,Brazil,Desk Chair,Furniture,F. Haddad,26,180,0.0,4680.0,Completed
+ORD-1048,2024-05-15,West,Germany,Standing Desk,Furniture,E. Rossi,5,520,0.0,2600.0,Refunded
+ORD-1049,2024-05-17,North,Canada,Monitor,Hardware,C. Nakamura,35,300,0.0,10500.0,Completed
+ORD-1050,2024-05-10,East,Japan,Monitor,Hardware,B. Okafor,16,300,0.0,4800.0,Pending
+ORD-1051,2024-05-17,Central,France,Desk Chair,Furniture,A. Silva,40,180,0.15,6120.0,Refunded
+ORD-1052,2024-05-04,East,Japan,Monitor,Hardware,A. Silva,9,300,0.0,2700.0,Refunded
+ORD-1053,2024-05-07,South,Brazil,Desk Chair,Furniture,F. Haddad,19,180,0.1,3078.0,Completed
+ORD-1054,2024-05-09,South,Brazil,Desk Chair,Furniture,A. Silva,33,180,0.05,5643.0,Completed
+ORD-1055,2024-05-11,West,Germany,Desk Chair,Furniture,B. Okafor,3,180,0.0,540.0,Completed
+ORD-1056,2024-05-14,South,Brazil,Docking Station,Hardware,E. Rossi,36,210,0.15,6426.0,Completed
+ORD-1057,2024-06-27,North,Canada,Keyboard,Accessories,C. Nakamura,35,45,0.0,1575.0,Refunded
+ORD-1058,2024-06-02,Central,France,Keyboard,Accessories,C. Nakamura,28,45,0.0,1260.0,Completed
+ORD-1059,2024-06-08,North,Canada,Standing Desk,Furniture,F. Haddad,14,520,0.15,6188.0,Completed
+ORD-1060,2024-06-05,East,Japan,Webcam,Accessories,B. Okafor,40,70,0.15,2380.0,Completed
+ORD-1061,2024-06-24,South,Brazil,Webcam,Accessories,C. Nakamura,2,70,0.0,140.0,Pending
+ORD-1062,2024-06-04,South,Brazil,Desk Chair,Furniture,D. Muller,11,180,0.15,1683.0,Completed
+ORD-1063,2024-06-12,West,Germany,Mouse,Accessories,C. Nakamura,13,25,0.05,308.75,Completed
+ORD-1064,2024-07-09,North,Canada,Mouse,Accessories,A. Silva,26,25,0.0,650.0,Completed
+ORD-1065,2024-07-01,East,Japan,Webcam,Accessories,A. Silva,35,70,0.0,2450.0,Completed
+ORD-1066,2024-07-20,South,Brazil,Desk Chair,Furniture,D. Muller,3,180,0.0,540.0,Completed
+ORD-1067,2024-07-04,East,Japan,Webcam,Accessories,D. Muller,39,70,0.1,2457.0,Refunded
+ORD-1068,2024-07-14,South,Brazil,Desk Chair,Furniture,A. Silva,3,180,0.15,459.0,Refunded
+ORD-1069,2024-07-03,Central,France,Mouse,Accessories,F. Haddad,24,25,0.05,570.0,Completed
+ORD-1070,2024-07-10,Central,France,Standing Desk,Furniture,E. Rossi,8,520,0.15,3536.0,Completed
+ORD-1071,2024-07-10,West,Germany,Standing Desk,Furniture,E. Rossi,26,520,0.15,11492.0,Completed
+ORD-1072,2024-08-19,West,Germany,Webcam,Accessories,C. Nakamura,12,70,0.1,756.0,Pending
+ORD-1073,2024-08-07,Central,France,Laptop,Hardware,D. Muller,20,1200,0.0,24000.0,Refunded
+ORD-1074,2024-08-15,Central,France,Standing Desk,Furniture,F. Haddad,30,520,0.05,14820.0,Completed
+ORD-1075,2024-08-03,Central,France,Docking Station,Hardware,C. Nakamura,11,210,0.15,1963.5,Refunded
+ORD-1076,2024-08-22,Central,France,Standing Desk,Furniture,C. Nakamura,6,520,0.0,3120.0,Completed
+ORD-1077,2024-08-08,South,Brazil,Keyboard,Accessories,D. Muller,2,45,0.0,90.0,Refunded
+ORD-1078,2024-08-19,North,Canada,Docking Station,Hardware,B. Okafor,27,210,0.15,4819.5,Pending
+ORD-1079,2024-08-21,West,Germany,Webcam,Accessories,F. Haddad,16,70,0.0,1120.0,Completed
+ORD-1080,2024-09-17,West,Germany,Mouse,Accessories,D. Muller,12,25,0.15,255.0,Completed
+ORD-1081,2024-09-05,Central,France,Mouse,Accessories,D. Muller,8,25,0.05,190.0,Refunded
+ORD-1082,2024-09-27,Central,France,Standing Desk,Furniture,F. Haddad,29,520,0.1,13572.0,Refunded
+ORD-1083,2024-09-28,West,Germany,Docking Station,Hardware,D. Muller,11,210,0.15,1963.5,Pending
+ORD-1084,2024-09-16,East,Japan,Mouse,Accessories,F. Haddad,18,25,0.1,405.0,Completed
+ORD-1085,2024-09-10,East,Japan,Docking Station,Hardware,B. Okafor,5,210,0.15,892.5,Completed
+ORD-1086,2024-09-05,East,Japan,Standing Desk,Furniture,B. Okafor,35,520,0.0,18200.0,Completed
+ORD-1087,2024-10-14,South,Brazil,Mouse,Accessories,C. Nakamura,5,25,0.05,118.75,Refunded
+ORD-1088,2024-10-27,West,Germany,Webcam,Accessories,D. Muller,4,70,0.0,280.0,Pending
+ORD-1089,2024-10-16,Central,France,Laptop,Hardware,A. Silva,37,1200,0.05,42180.0,Completed
+ORD-1090,2024-10-24,East,Japan,Webcam,Accessories,F. Haddad,27,70,0.1,1701.0,Refunded
+ORD-1091,2024-10-09,Central,France,Mouse,Accessories,D. Muller,32,25,0.0,800.0,Pending
+ORD-1092,2024-10-22,North,Canada,Webcam,Accessories,D. Muller,22,70,0.15,1309.0,Completed
+ORD-1093,2024-10-01,West,Germany,Keyboard,Accessories,D. Muller,40,45,0.1,1620.0,Refunded
+ORD-1094,2024-10-14,Central,France,Laptop,Hardware,B. Okafor,6,1200,0.15,6120.0,Pending
+ORD-1095,2024-10-11,South,Brazil,Laptop,Hardware,B. Okafor,17,1200,0.05,19380.0,Pending
+ORD-1096,2024-10-25,East,Japan,Standing Desk,Furniture,D. Muller,25,520,0.0,13000.0,Completed
+ORD-1097,2024-11-12,West,Germany,Laptop,Hardware,B. Okafor,35,1200,0.0,42000.0,Completed
+ORD-1098,2024-11-27,North,Canada,Laptop,Hardware,A. Silva,16,1200,0.0,19200.0,Refunded
+ORD-1099,2024-11-22,South,Brazil,Mouse,Accessories,A. Silva,9,25,0.05,213.75,Refunded
+ORD-1100,2024-11-06,South,Brazil,Docking Station,Hardware,E. Rossi,17,210,0.0,3570.0,Refunded
+ORD-1101,2024-11-19,North,Canada,Keyboard,Accessories,A. Silva,20,45,0.0,900.0,Completed
+ORD-1102,2024-11-07,Central,France,Webcam,Accessories,A. Silva,26,70,0.15,1547.0,Refunded
+ORD-1103,2024-11-20,South,Brazil,Monitor,Hardware,A. Silva,20,300,0.15,5100.0,Refunded
+ORD-1104,2024-12-17,East,Japan,Webcam,Accessories,F. Haddad,24,70,0.0,1680.0,Completed
+ORD-1105,2024-12-14,North,Canada,Webcam,Accessories,C. Nakamura,32,70,0.0,2240.0,Pending
+ORD-1106,2024-12-17,South,Brazil,Webcam,Accessories,F. Haddad,12,70,0.15,714.0,Completed
+ORD-1107,2024-12-27,Central,France,Docking Station,Hardware,F. Haddad,30,210,0.05,5985.0,Refunded
+ORD-1108,2024-12-09,East,Japan,Standing Desk,Furniture,D. Muller,16,520,0.0,8320.0,Completed
+ORD-1109,2024-12-16,West,Germany,Webcam,Accessories,C. Nakamura,22,70,0.0,1540.0,Completed
+ORD-1110,2024-12-11,West,Germany,Mouse,Accessories,C. Nakamura,23,25,0.0,575.0,Refunded
+ORD-1111,2025-01-03,East,Japan,Laptop,Hardware,B. Okafor,34,1200,0.0,40800.0,Pending
+ORD-1112,2025-01-23,West,Germany,Mouse,Accessories,D. Muller,31,25,0.15,658.75,Pending
+ORD-1113,2025-01-13,North,Canada,Monitor,Hardware,F. Haddad,19,300,0.0,5700.0,Completed
+ORD-1114,2025-01-17,East,Japan,Standing Desk,Furniture,C. Nakamura,31,520,0.1,14508.0,Pending
+ORD-1115,2025-01-15,Central,France,Standing Desk,Furniture,C. Nakamura,23,520,0.15,10166.0,Completed
+ORD-1116,2025-01-07,East,Japan,Mouse,Accessories,C. Nakamura,8,25,0.15,170.0,Completed
+ORD-1117,2025-01-24,Central,France,Keyboard,Accessories,D. Muller,13,45,0.0,585.0,Completed
+ORD-1118,2025-01-10,Central,France,Desk Chair,Furniture,B. Okafor,7,180,0.0,1260.0,Completed
+ORD-1119,2025-01-18,South,Brazil,Desk Chair,Furniture,B. Okafor,1,180,0.15,153.0,Completed
+ORD-1120,2025-01-23,North,Canada,Laptop,Hardware,B. Okafor,36,1200,0.0,43200.0,Pending
+ORD-1121,2025-01-16,North,Canada,Laptop,Hardware,D. Muller,37,1200,0.0,44400.0,Pending
+ORD-1122,2025-01-28,East,Japan,Keyboard,Accessories,D. Muller,4,45,0.0,180.0,Completed
+ORD-1123,2025-02-21,West,Germany,Docking Station,Hardware,F. Haddad,5,210,0.1,945.0,Completed
+ORD-1124,2025-02-03,South,Brazil,Keyboard,Accessories,B. Okafor,37,45,0.0,1665.0,Completed
+ORD-1125,2025-02-26,Central,France,Webcam,Accessories,E. Rossi,39,70,0.1,2457.0,Completed
+ORD-1126,2025-02-10,Central,France,Webcam,Accessories,E. Rossi,29,70,0.05,1928.5,Pending
+ORD-1127,2025-02-04,East,Japan,Laptop,Hardware,B. Okafor,40,1200,0.15,40800.0,Completed
+ORD-1128,2025-02-06,East,Japan,Monitor,Hardware,E. Rossi,11,300,0.0,3300.0,Completed
+ORD-1129,2025-02-23,South,Brazil,Laptop,Hardware,E. Rossi,27,1200,0.05,30780.0,Pending
+ORD-1130,2025-03-10,North,Canada,Mouse,Accessories,F. Haddad,19,25,0.15,403.75,Pending
+ORD-1131,2025-03-19,North,Canada,Mouse,Accessories,F. Haddad,17,25,0.15,361.25,Completed
+ORD-1132,2025-03-21,West,Germany,Monitor,Hardware,B. Okafor,35,300,0.0,10500.0,Completed
+ORD-1133,2025-03-26,South,Brazil,Monitor,Hardware,C. Nakamura,4,300,0.0,1200.0,Refunded
+ORD-1134,2025-03-15,Central,France,Desk Chair,Furniture,F. Haddad,29,180,0.0,5220.0,Completed
+ORD-1135,2025-03-16,West,Germany,Desk Chair,Furniture,D. Muller,33,180,0.1,5346.0,Completed
+ORD-1136,2025-03-11,Central,France,Laptop,Hardware,E. Rossi,28,1200,0.15,28560.0,Completed
+ORD-1137,2025-03-27,North,Canada,Monitor,Hardware,E. Rossi,15,300,0.15,3825.0,Refunded
+ORD-1138,2025-03-25,North,Canada,Desk Chair,Furniture,B. Okafor,37,180,0.0,6660.0,Pending
+ORD-1139,2025-04-14,West,Germany,Desk Chair,Furniture,F. Haddad,12,180,0.1,1944.0,Pending
+ORD-1140,2025-04-11,North,Canada,Docking Station,Hardware,C. Nakamura,23,210,0.05,4588.5,Completed
+ORD-1141,2025-04-16,South,Brazil,Standing Desk,Furniture,C. Nakamura,27,520,0.15,11934.0,Pending
+ORD-1142,2025-04-11,Central,France,Laptop,Hardware,C. Nakamura,30,1200,0.0,36000.0,Completed
+ORD-1143,2025-04-22,North,Canada,Webcam,Accessories,E. Rossi,33,70,0.0,2310.0,Pending
+ORD-1144,2025-04-12,West,Germany,Laptop,Hardware,E. Rossi,13,1200,0.1,14040.0,Pending
+ORD-1145,2025-04-18,West,Germany,Laptop,Hardware,B. Okafor,14,1200,0.0,16800.0,Completed
+ORD-1146,2025-04-21,West,Germany,Docking Station,Hardware,E. Rossi,8,210,0.0,1680.0,Completed
+ORD-1147,2025-04-18,South,Brazil,Desk Chair,Furniture,D. Muller,36,180,0.0,6480.0,Completed
+ORD-1148,2025-04-21,South,Brazil,Monitor,Hardware,B. Okafor,30,300,0.0,9000.0,Pending
+ORD-1149,2025-04-16,East,Japan,Desk Chair,Furniture,B. Okafor,27,180,0.05,4617.0,Pending
+ORD-1150,2025-05-17,South,Brazil,Webcam,Accessories,F. Haddad,13,70,0.1,819.0,Completed
+ORD-1151,2025-05-26,North,Canada,Desk Chair,Furniture,E. Rossi,27,180,0.0,4860.0,Completed
+ORD-1152,2025-05-19,North,Canada,Desk Chair,Furniture,F. Haddad,20,180,0.1,3240.0,Pending
+ORD-1153,2025-05-12,South,Brazil,Docking Station,Hardware,C. Nakamura,35,210,0.05,6982.5,Refunded
+ORD-1154,2025-05-28,Central,France,Webcam,Accessories,B. Okafor,30,70,0.0,2100.0,Completed
+ORD-1155,2025-05-02,Central,France,Webcam,Accessories,C. Nakamura,15,70,0.05,997.5,Pending
+ORD-1156,2025-05-02,West,Germany,Webcam,Accessories,B. Okafor,10,70,0.05,665.0,Refunded
+ORD-1157,2025-05-04,Central,France,Standing Desk,Furniture,E. Rossi,7,520,0.05,3458.0,Pending
+ORD-1158,2025-05-05,North,Canada,Keyboard,Accessories,A. Silva,27,45,0.15,1032.75,Pending
+ORD-1159,2025-05-13,East,Japan,Standing Desk,Furniture,F. Haddad,40,520,0.15,17680.0,Completed
+ORD-1160,2025-05-23,East,Japan,Webcam,Accessories,D. Muller,21,70,0.15,1249.5,Refunded
+ORD-1161,2025-06-22,Central,France,Monitor,Hardware,C. Nakamura,16,300,0.15,4080.0,Completed
+ORD-1162,2025-06-23,North,Canada,Webcam,Accessories,A. Silva,7,70,0.15,416.5,Pending
+ORD-1163,2025-06-11,South,Brazil,Desk Chair,Furniture,A. Silva,2,180,0.0,360.0,Completed
+ORD-1164,2025-06-08,East,Japan,Standing Desk,Furniture,E. Rossi,28,520,0.0,14560.0,Pending
+ORD-1165,2025-06-03,Central,France,Keyboard,Accessories,E. Rossi,11,45,0.0,495.0,Pending
+ORD-1166,2025-06-05,Central,France,Mouse,Accessories,B. Okafor,32,25,0.1,720.0,Pending
+ORD-1167,2025-06-01,East,Japan,Docking Station,Hardware,D. Muller,17,210,0.15,3034.5,Completed
+ORD-1168,2025-07-12,Central,France,Keyboard,Accessories,E. Rossi,5,45,0.05,213.75,Completed
+ORD-1169,2025-07-07,West,Germany,Desk Chair,Furniture,D. Muller,30,180,0.0,5400.0,Pending
+ORD-1170,2025-07-12,North,Canada,Mouse,Accessories,E. Rossi,25,25,0.1,562.5,Completed
+ORD-1171,2025-07-01,East,Japan,Laptop,Hardware,E. Rossi,26,1200,0.0,31200.0,Completed
+ORD-1172,2025-07-20,Central,France,Docking Station,Hardware,C. Nakamura,19,210,0.0,3990.0,Completed
+ORD-1173,2025-07-04,South,Brazil,Desk Chair,Furniture,F. Haddad,9,180,0.15,1377.0,Completed
+ORD-1174,2025-07-12,East,Japan,Docking Station,Hardware,F. Haddad,3,210,0.1,567.0,Completed
+ORD-1175,2025-07-14,North,Canada,Desk Chair,Furniture,B. Okafor,21,180,0.15,3213.0,Completed
+ORD-1176,2025-07-09,South,Brazil,Standing Desk,Furniture,B. Okafor,34,520,0.1,15912.0,Completed
+ORD-1177,2025-07-15,West,Germany,Desk Chair,Furniture,A. Silva,22,180,0.0,3960.0,Completed
+ORD-1178,2025-07-03,South,Brazil,Webcam,Accessories,D. Muller,36,70,0.0,2520.0,Completed
+ORD-1179,2025-07-22,East,Japan,Monitor,Hardware,F. Haddad,30,300,0.0,9000.0,Completed
+ORD-1180,2025-08-08,West,Germany,Standing Desk,Furniture,D. Muller,7,520,0.15,3094.0,Completed
+ORD-1181,2025-08-21,Central,France,Standing Desk,Furniture,A. Silva,40,520,0.0,20800.0,Pending
+ORD-1182,2025-08-02,East,Japan,Webcam,Accessories,A. Silva,8,70,0.0,560.0,Completed
+ORD-1183,2025-08-18,West,Germany,Monitor,Hardware,B. Okafor,7,300,0.0,2100.0,Pending
+ORD-1184,2025-08-19,West,Germany,Standing Desk,Furniture,F. Haddad,35,520,0.05,17290.0,Completed
+ORD-1185,2025-08-14,West,Germany,Monitor,Hardware,C. Nakamura,32,300,0.1,8640.0,Completed
+ORD-1186,2025-08-08,East,Japan,Mouse,Accessories,C. Nakamura,29,25,0.05,688.75,Completed
+ORD-1187,2025-08-09,East,Japan,Standing Desk,Furniture,B. Okafor,4,520,0.05,1976.0,Completed
+ORD-1188,2025-08-21,West,Germany,Monitor,Hardware,E. Rossi,14,300,0.15,3570.0,Completed
+ORD-1189,2025-08-26,North,Canada,Standing Desk,Furniture,E. Rossi,16,520,0.0,8320.0,Completed
+ORD-1190,2025-08-27,North,Canada,Mouse,Accessories,B. Okafor,38,25,0.0,950.0,Completed
+ORD-1191,2025-09-05,Central,France,Laptop,Hardware,E. Rossi,18,1200,0.0,21600.0,Completed
+ORD-1192,2025-09-01,South,Brazil,Monitor,Hardware,C. Nakamura,2,300,0.0,600.0,Completed
+ORD-1193,2025-09-09,Central,France,Standing Desk,Furniture,A. Silva,2,520,0.0,1040.0,Completed
+ORD-1194,2025-09-15,West,Germany,Monitor,Hardware,C. Nakamura,5,300,0.05,1425.0,Refunded
+ORD-1195,2025-09-08,Central,France,Monitor,Hardware,E. Rossi,29,300,0.1,7830.0,Completed
+ORD-1196,2025-09-01,Central,France,Desk Chair,Furniture,A. Silva,30,180,0.15,4590.0,Pending
+ORD-1197,2025-09-23,West,Germany,Webcam,Accessories,D. Muller,7,70,0.05,465.5,Completed
+ORD-1198,2025-09-03,North,Canada,Standing Desk,Furniture,B. Okafor,39,520,0.0,20280.0,Completed
+ORD-1199,2025-10-17,Central,France,Standing Desk,Furniture,C. Nakamura,25,520,0.1,11700.0,Pending
+ORD-1200,2025-10-04,Central,France,Webcam,Accessories,F. Haddad,7,70,0.15,416.5,Refunded
+ORD-1201,2025-10-14,South,Brazil,Webcam,Accessories,C. Nakamura,29,70,0.0,2030.0,Pending
+ORD-1202,2025-10-14,West,Germany,Webcam,Accessories,C. Nakamura,7,70,0.0,490.0,Completed
+ORD-1203,2025-10-03,East,Japan,Keyboard,Accessories,A. Silva,31,45,0.0,1395.0,Completed
+ORD-1204,2025-10-18,West,Germany,Monitor,Hardware,A. Silva,24,300,0.0,7200.0,Refunded
+ORD-1205,2025-10-12,Central,France,Standing Desk,Furniture,F. Haddad,8,520,0.05,3952.0,Pending
+ORD-1206,2025-10-12,North,Canada,Desk Chair,Furniture,A. Silva,39,180,0.0,7020.0,Refunded
+ORD-1207,2025-10-16,Central,France,Mouse,Accessories,B. Okafor,10,25,0.15,212.5,Completed
+ORD-1208,2025-10-19,East,Japan,Standing Desk,Furniture,B. Okafor,8,520,0.0,4160.0,Pending
+ORD-1209,2025-10-27,Central,France,Laptop,Hardware,F. Haddad,39,1200,0.15,39780.0,Completed
+ORD-1210,2025-11-12,South,Brazil,Desk Chair,Furniture,A. Silva,20,180,0.0,3600.0,Completed
+ORD-1211,2025-11-24,South,Brazil,Webcam,Accessories,F. Haddad,5,70,0.0,350.0,Completed
+ORD-1212,2025-11-15,North,Canada,Mouse,Accessories,C. Nakamura,25,25,0.05,593.75,Completed
+ORD-1213,2025-11-20,East,Japan,Desk Chair,Furniture,A. Silva,21,180,0.1,3402.0,Completed
+ORD-1214,2025-11-22,South,Brazil,Keyboard,Accessories,A. Silva,40,45,0.0,1800.0,Completed
+ORD-1215,2025-11-15,West,Germany,Webcam,Accessories,D. Muller,32,70,0.1,2016.0,Completed
+ORD-1216,2025-11-04,South,Brazil,Monitor,Hardware,C. Nakamura,23,300,0.05,6555.0,Refunded
+ORD-1217,2025-12-13,Central,France,Desk Chair,Furniture,E. Rossi,3,180,0.0,540.0,Completed
+ORD-1218,2025-12-25,North,Canada,Mouse,Accessories,B. Okafor,20,25,0.0,500.0,Completed
+ORD-1219,2025-12-16,East,Japan,Standing Desk,Furniture,F. Haddad,8,520,0.0,4160.0,Pending
+ORD-1220,2025-12-23,South,Brazil,Keyboard,Accessories,B. Okafor,25,45,0.1,1012.5,Refunded
+ORD-1221,2025-12-28,Central,France,Standing Desk,Furniture,F. Haddad,5,520,0.05,2470.0,Completed
+ORD-1222,2025-12-28,West,Germany,Laptop,Hardware,C. Nakamura,30,1200,0.0,36000.0,Refunded
+ORD-1223,2025-12-04,West,Germany,Webcam,Accessories,D. Muller,27,70,0.0,1890.0,Completed
+ORD-1224,2025-12-27,East,Japan,Keyboard,Accessories,F. Haddad,40,45,0.05,1710.0,Completed
+ORD-1225,2025-12-14,North,Canada,Webcam,Accessories,E. Rossi,7,70,0.0,490.0,Pending
+ORD-1226,2025-12-24,Central,France,Monitor,Hardware,C. Nakamura,26,300,0.0,7800.0,Completed
+ORD-1003,2024-01-19,Central,France,Webcam,Accessories,C. Nakamura,15,70,0.05,997.5,Completed

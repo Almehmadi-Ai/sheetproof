@@ -1,0 +1,6 @@
+# Runtime dependencies for the Spreadsheet Analyst tool.
+# Open WebUI installs these automatically from the tool header (`requirements:`).
+# They are listed here for local development, testing, and the sample generator.
+pandas>=2.0
+numpy>=1.24
+openpyxl>=3.1
