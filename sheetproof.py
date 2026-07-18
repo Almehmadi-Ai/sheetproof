@@ -1,9 +1,9 @@
 """
-title: Spreadsheet Analyst
+title: SheetProof
 author: Abdulrahman Almehmadi
-author_url: https://github.com/dhmychi/openwebui-spreadsheet-analyst
-funding_url: https://github.com/dhmychi/openwebui-spreadsheet-analyst
-version: 1.0.0
+author_url: https://github.com/dhmychi/sheetproof
+funding_url: https://github.com/dhmychi/sheetproof
+version: 1.1.0
 license: MIT
 required_open_webui_version: 0.5.0
 requirements: pandas, numpy, openpyxl
@@ -559,7 +559,7 @@ class Tools:
             name = f.get("name") or (f.get("file") or {}).get("filename") or ""
             if fid and (not name or name.lower().endswith(SPREADSHEET_EXTS)):
                 candidates.append(fid)
-        # custom stash set by the spreadsheet_router filter
+        # custom stash set by the sheetproof_router filter
         for fid in ((__metadata__ or {}).get("analyst_file_ids") or []):
             candidates.append(fid)
         seen, ordered = set(), []

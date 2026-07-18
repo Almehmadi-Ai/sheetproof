@@ -1,6 +1,6 @@
 # Usage & operation reference
 
-You interact with Spreadsheet Analyst in natural language — attach a spreadsheet and ask. Behind
+You interact with SheetProof in natural language — attach a spreadsheet and ask. Behind
 the scenes the model calls two functions.
 
 ## The two functions

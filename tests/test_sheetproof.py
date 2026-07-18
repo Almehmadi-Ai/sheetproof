@@ -1,4 +1,4 @@
-"""Tests for the deterministic engine in spreadsheet_analyst.py.
+"""Tests for the deterministic engine in sheetproof.py.
 
 The engine is plain pandas and imports cleanly outside Open WebUI, so these tests exercise
 the core directly (schema inference, aggregation, the transform pipeline, locale-tolerant
@@ -18,8 +18,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def _load_engine():
-    path = os.path.join(ROOT, "spreadsheet_analyst.py")
-    spec = importlib.util.spec_from_file_location("spreadsheet_analyst", path)
+    path = os.path.join(ROOT, "sheetproof.py")
+    spec = importlib.util.spec_from_file_location("sheetproof", path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod

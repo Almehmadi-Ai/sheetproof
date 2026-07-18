@@ -1,0 +1,44 @@
+name: Bug report
+description: Report a problem with SheetProof
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please **do not attach files containing private data**. A synthetic reproduction
+        (see `examples/generate_samples.py`) is ideal.
+  - type: input
+    id: version
+    attributes:
+      label: SheetProof version
+      placeholder: "1.1.0"
+    validations:
+      required: true
+  - type: input
+    id: owui
+    attributes:
+      label: Open WebUI version
+      placeholder: "0.10.2"
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model used (and is Function Calling set to Native?)
+      placeholder: "e.g. a tool-calling model, native function calling ON"
+  - type: textarea
+    id: what
+    attributes:
+      label: What did you ask, and what happened?
+      description: Include the prompt, the operation/parameters if known, and the tool's response or error text.
+    validations:
+      required: true
+  - type: textarea
+    id: shape
+    attributes:
+      label: Data shape
+      description: Column names and their inferred roles (not the values).
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour

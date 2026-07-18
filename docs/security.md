@@ -1,6 +1,6 @@
 # Security considerations
 
-Spreadsheet Analyst is designed to be safe to run on real user uploads in a multi‑user Open WebUI
+SheetProof is designed to be safe to run on real user uploads in a multi‑user Open WebUI
 instance. This document describes its security properties and the assumptions behind them.
 
 ## No arbitrary code execution

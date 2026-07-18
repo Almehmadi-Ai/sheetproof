@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in improving Spreadsheet Analyst. Contributions of all kinds —
+Thanks for your interest in improving SheetProof. Contributions of all kinds —
 bug reports, documentation, and code — are welcome.
 
 ## Reporting bugs

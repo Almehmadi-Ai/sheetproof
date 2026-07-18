@@ -1,6 +1,6 @@
 # Architecture
 
-Spreadsheet Analyst is deliberately split into a **deterministic engine** (the tool) and a
+SheetProof is deliberately split into a **deterministic engine** (the tool) and a
 **routing/guardrail layer** (the filter). The language model sits *between* them and is used only
 for what it is good at — understanding the request and narrating verified results.
 
@@ -25,7 +25,7 @@ sequenceDiagram
     Fo-->>U: answer (unverified figures flagged / logged)
 ```
 
-## The engine (`spreadsheet_analyst.py`)
+## The engine (`sheetproof.py`)
 
 1. **File resolution.** The tool locates the actual uploaded file through Open WebUI's file model,
    scoped to the requesting user, with a filesystem fallback by id. Ids can arrive three ways: an
@@ -57,7 +57,7 @@ Rather than `eval`, expressions are parsed to an **AST** and validated against a
 Because there is no attribute access and no call outside the whitelist, the grammar cannot reach the
 Python runtime — it can only compute over the dataframe.
 
-## The router (`spreadsheet_router.py`)
+## The router (`sheetproof_router.py`)
 
 - **Inlet.** When a spreadsheet is attached it: removes the file from retrieval (so raw rows never
   enter the prompt), stashes the file id where the tool can find it, enables the tool and native

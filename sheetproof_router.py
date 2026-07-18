@@ -1,12 +1,12 @@
 """
-title: Spreadsheet Router
+title: SheetProof Router
 author: Abdulrahman Almehmadi
-author_url: https://github.com/dhmychi/openwebui-spreadsheet-analyst
-version: 1.0.0
+author_url: https://github.com/dhmychi/sheetproof
+version: 1.1.0
 license: MIT
 required_open_webui_version: 0.5.0
 description: When an Excel/CSV file is attached, bypass RAG for it (so the data never
-  enters the prompt), enable the Spreadsheet Analyst tool + native function-calling, and
+  enters the prompt), enable the SheetProof tool + native function-calling, and
   inject a contract that forbids invented/derived numbers while keeping the model's
   answer style fully flexible. The outlet runs an OUTPUT AUDIT: every significant figure
   in the final answer must trace back to a tool result, otherwise it is flagged so an
@@ -24,7 +24,7 @@ from pydantic import BaseModel, Field
 _audit_log = logging.getLogger("open_webui.spreadsheet_audit")
 
 SPREADSHEET_EXTS = (".xlsx", ".xls", ".xlsm", ".csv", ".tsv")
-TOOL_ID = "spreadsheet_analyst"
+TOOL_ID = "sheetproof"
 TOOL_FUNCS = ("inspect_spreadsheet", "analyze_spreadsheet")
 
 CONTRACT = (
@@ -373,7 +373,7 @@ class Filter:
         **kwargs,
     ) -> dict:
         """OUTPUT AUDIT: flag any significant figure in the final answer that does not
-        trace back to a Spreadsheet Analyst tool result. Runs only on chats that used the
+        trace back to a SheetProof tool result. Runs only on chats that used the
         tool; all other chats pass through untouched. Non-destructive (annotate)."""
         if not (self.valves.enabled and self.valves.audit_enabled):
             return body
