@@ -1,6 +1,10 @@
-# Runtime dependencies for the SheetProof tool.
-# Open WebUI installs these automatically from the tool header (`requirements:`).
-# They are listed here for local development, testing, and the sample generator.
+# Dependencies for local development, testing, and the sample generator.
+#
+# Inside Open WebUI you do not need this file: pandas / numpy / openpyxl are declared
+# in the tool header (`requirements:`) and installed automatically, and Open WebUI
+# already ships pydantic. It is listed here because the plugins import it, so a
+# standalone environment (like CI) needs it to load them.
 pandas>=2.0
 numpy>=1.24
 openpyxl>=3.1
+pydantic>=2.0
