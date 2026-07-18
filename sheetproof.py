@@ -1,8 +1,8 @@
 """
 title: SheetProof
 author: Abdulrahman Almehmadi
-author_url: https://github.com/dhmychi/sheetproof
-funding_url: https://github.com/dhmychi/sheetproof
+author_url: https://github.com/Almehmadi-Ai/sheetproof
+funding_url: https://github.com/Almehmadi-Ai/sheetproof
 version: 1.1.0
 license: MIT
 required_open_webui_version: 0.5.0
