@@ -2,23 +2,22 @@
 title: SheetProof Router
 author: Abdulrahman Almehmadi
 author_url: https://github.com/Almehmadi-Ai/sheetproof
-version: 1.1.0
+version: 1.2.0
 license: MIT
 required_open_webui_version: 0.5.0
-description: When an Excel/CSV file is attached, bypass RAG for it (so the data never
-  enters the prompt), enable the SheetProof tool + native function-calling, and
-  inject a contract that forbids invented/derived numbers while keeping the model's
-  answer style fully flexible. The outlet runs an OUTPUT AUDIT: every significant figure
-  in the final answer must trace back to a tool result, otherwise it is flagged so an
-  unverified number fails safe instead of being presented as fact. Acts ONLY on
-  spreadsheet chats; all other chats are untouched.
+description: When an Excel/CSV file is attached, keeps it out of retrieval (so its rows are
+  not pasted into the prompt), enables the SheetProof tool with native function calling, and
+  instructs the model to take every number from the tool. The outlet checks the figures in
+  the final answer against the tool results and logs, or optionally annotates, those that do
+  not match. Chats without a spreadsheet are left untouched.
 """
 
-import re
 import html
 import json
 import logging
+import re
 from typing import Optional
+
 from pydantic import BaseModel, Field
 
 _audit_log = logging.getLogger("open_webui.spreadsheet_audit")
@@ -39,10 +38,10 @@ CONTRACT = (
     "(top_n and group_aggregate return `summary.returned_subtotal` and "
     "`returned_share_of_total_pct`; anomalies returns `flagged_sum` and "
     "`flagged_share_of_total_pct`).\n"
-    "- Never COUNT rows yourself. For \"how many X are Y\" use the tool's `breakdown` "
+    '- Never COUNT rows yourself. For "how many X are Y" use the tool\'s `breakdown` '
     "(e.g. anomalies breakdown by a dimension), never tally rows in your head.\n"
     "- For dates relative to a reference (today / as-of / expiry / age), pass the date "
-    "via params (e.g. params={{\"today\": \"2026-06-16\"}}) and compute with "
+    'via params (e.g. params={{"today": "2026-06-16"}}) and compute with '
     "datediff(`Date Column`, @today) in a transform 'derive' step. Never work out day "
     "counts, ages, or date differences yourself.\n"
     "- If a tool step errors or returns null/empty (e.g. 'unknown parameter'), FIX the "
@@ -70,12 +69,35 @@ CONTRACT = (
 )
 
 # --------------------------------------------------------------------------- #
-# Output-audit helpers (deterministic, no domain assumptions)
+# Output audit: numbers
 # --------------------------------------------------------------------------- #
 _NUM_RE = re.compile(r"[-+]?\d[\d,]*(?:\.\d+)?")
-_STRUCTURAL = ("step", "phase", "tier", "top ", "part", "stage", "section",
-               "table", "figure", "rank", "no.", "no ", "#", "q1", "q2", "q3", "q4",
-               "row", "rows", "item", "line", "record", "page", "col")
+_STRUCTURAL = (
+    "step",
+    "phase",
+    "tier",
+    "top ",
+    "part",
+    "stage",
+    "section",
+    "table",
+    "figure",
+    "rank",
+    "no.",
+    "no ",
+    "#",
+    "q1",
+    "q2",
+    "q3",
+    "q4",
+    "row",
+    "rows",
+    "item",
+    "line",
+    "record",
+    "page",
+    "col",
+)
 
 
 def _to_float(tok: str):
@@ -104,14 +126,11 @@ def _candidate_numbers(text: str, mode: str) -> list:
     for m in _NUM_RE.finditer(text):
         tok = m.group(0)
         end = m.end()
-        is_pct = text[end:end + 1] == "%" or text[end:end + 2] == " %"
-        # skip numbers that are part of a date or hyphenated token (e.g. 08/12/2024,
-        # 2025-02-06) — these are not standalone figures the model is claiming.
+        is_pct = text[end : end + 1] == "%" or text[end : end + 2] == " %"
+        # a separator or digit right before or after means a fragment of a date, code or
+        # longer number (the "-28" of 2024-12-28, "0001" in PO-2024-0001), not a figure
         prev_ch = text[m.start() - 1] if m.start() > 0 else ""
-        next_ch = text[end + (1 if is_pct else 0):end + (2 if is_pct else 1)]
-        # skip fragments of dates / hyphenated codes / glued numbers: a separator or a
-        # digit immediately before/after means this isn't a standalone claimed figure
-        # (e.g. the "-28" tail of 2024-12-28, or "0001" in PO-2024-0001).
+        next_ch = text[end + (1 if is_pct else 0) : end + (2 if is_pct else 1)]
         if prev_ch in "/-" or next_ch in "/-" or prev_ch.isdigit() or next_ch.isdigit():
             continue
         v = _to_float(tok)
@@ -125,7 +144,7 @@ def _candidate_numbers(text: str, mode: str) -> list:
                 continue
             if v == int(v) and 1900 <= v <= 2100:  # year-like
                 continue
-            ctx = low[max(0, m.start() - 14):m.start()]
+            ctx = low[max(0, m.start() - 14) : m.start()]
             if any(w in ctx for w in _STRUCTURAL):
                 continue
         cands.append((tok + ("%" if is_pct else ""), v, is_pct))
@@ -150,7 +169,19 @@ def _is_verified(value: float, is_pct: bool, corpus: list) -> bool:
     return False
 
 
-# --- Approach 2: per-entity recorded-VALUE backstop (categorical/text fidelity) ------
+# --------------------------------------------------------------------------- #
+# Output audit: recorded values. Text cells in the answer's tables must match the tool's
+# rows for the same entity.
+# --------------------------------------------------------------------------- #
+def _tool_call_ids(output) -> set:
+    """Call ids of the SheetProof function calls in an assistant message's output blocks."""
+    return {
+        b.get("call_id") or b.get("id")
+        for b in output
+        if isinstance(b, dict) and b.get("type") == "function_call" and b.get("name") in TOOL_FUNCS
+    }
+
+
 def _norm_val(s) -> str:
     if s is None:
         return ""
@@ -162,15 +193,14 @@ def _harvest_records(output) -> list:
     recs = []
     if not isinstance(output, list):
         return recs
-    our = {b.get("call_id") or b.get("id") for b in output if isinstance(b, dict)
-           and b.get("type") == "function_call" and b.get("name") in TOOL_FUNCS}
+    our = _tool_call_ids(output)
     for b in output:
         if isinstance(b, dict) and b.get("type") == "function_call_output":
             if our and b.get("call_id") not in our:
                 continue
             try:
                 j = json.loads(_block_text(b.get("output")))
-            except Exception:
+            except (TypeError, ValueError):  # not a JSON tool result
                 continue
             res = j.get("result") if isinstance(j, dict) else None
             if isinstance(res, list):
@@ -192,7 +222,7 @@ def _parse_md_tables(text: str) -> list:
             while j < len(lines) and lines[j].strip().startswith("|"):
                 cells = [c.strip() for c in lines[j].strip().strip("|").split("|")]
                 if len(cells) == len(headers):
-                    rows.append(dict(zip(headers, cells)))
+                    rows.append(dict(zip(headers, cells, strict=True)))
                 j += 1
             out.append((headers, rows))
             i = j
@@ -202,11 +232,10 @@ def _parse_md_tables(text: str) -> list:
 
 
 def _audit_categorical(output, answer: str) -> list:
-    """Backstop: when the tool returned per-row records, verify that categorical/text
-    cells in the answer's tables match the file's value for that SAME entity. Fully
-    schema-agnostic: the entity column is the most-distinct string column; answer headers
-    are matched to tool columns by token overlap. Numeric cells are left to the number
-    audit. Returns a list of mismatch strings (for logging)."""
+    """Mismatches between text cells in the answer's tables and the tool's rows for the same
+    entity, as strings for the log. The entity column is the most distinct text column of the
+    returned rows; answer headers are matched to tool columns by word overlap. Numeric cells
+    are left to the number audit."""
     records = _harvest_records(output)
     if not records:
         return []
@@ -215,8 +244,7 @@ def _audit_categorical(output, answer: str) -> list:
         for k in r.keys():
             if k not in keys:
                 keys.append(k)
-    str_cols = [c for c in keys
-                if sum(1 for r in records if isinstance(r.get(c), str)) >= max(2, len(records) // 2)]
+    str_cols = [c for c in keys if sum(1 for r in records if isinstance(r.get(c), str)) >= max(2, len(records) // 2)]
     if not str_cols:
         return []
 
@@ -236,10 +264,10 @@ def _audit_categorical(output, answer: str) -> list:
     for headers, rows in _parse_md_tables(answer):
         hdr_map = {}
         for h in headers:
-            ht = set(re.findall(r"[a-z0-9]+", h.lower()))
+            ht = set(re.findall(r"[^\W_]+", h.casefold()))
             best, bs = None, 0.0
             for tc in keys:
-                tt = set(re.findall(r"[a-z0-9]+", tc.lower()))
+                tt = set(re.findall(r"[^\W_]+", tc.casefold()))
                 if ht and tt:
                     sc = len(ht & tt) / len(ht | tt)
                     if sc > bs:
@@ -257,8 +285,12 @@ def _audit_categorical(output, answer: str) -> list:
                 nv, ntv = _norm_val(v), _norm_val(rec.get(tc))
                 nv_clean = nv.strip("*_`~ ").strip()
                 # skip when either side is empty / null / N-A (missing data is not a mismatch)
-                if (not nv or not ntv or ntv in ("nan", "none", "null", "n/a", "na")
-                        or nv_clean in ("", "n/a", "na", "-", "—", "none", "null", "no data")):
+                if (
+                    not nv
+                    or not ntv
+                    or ntv in ("nan", "none", "null", "n/a", "na")
+                    or nv_clean in ("", "n/a", "na", "-", "—", "none", "null", "no data")
+                ):
                     continue
                 if re.fullmatch(r"[-+]?[\d,]*\.?\d+\s*%?", nv) or re.fullmatch(r"[-+]?[\d,]*\.?\d+\s*%?", ntv):
                     continue  # numeric -> number audit handles it
@@ -292,26 +324,21 @@ def _is_sheet(f: dict) -> bool:
 class Filter:
     class Valves(BaseModel):
         enabled: bool = Field(True, description="Master switch for the router.")
-        bypass_rag: bool = Field(
-            True, description="Remove spreadsheet files from the RAG path."
-        )
-        audit_enabled: bool = Field(
-            True, description="Audit the final answer's numbers against tool results."
-        )
+        bypass_rag: bool = Field(True, description="Remove spreadsheet files from the RAG path.")
+        audit_enabled: bool = Field(True, description="Audit the final answer's numbers against tool results.")
         audit_mode: str = Field(
             "strict",
-            description="'strict' (default) = audit decimals/percent/large numbers AND "
-            "integer counts >= 4 (catches self-computed day-counts/tallies; skips years "
-            "and structural numbers). 'monetary' = only decimals/thousands/currency/"
-            "percent + large numbers (fewer flags, misses bad integer counts).",
+            description="'strict' (default) checks decimals, percentages, numbers of 1,000 or more, "
+            "and integer counts of 4 or more (skipping years and structural numbers such as "
+            "'step 4'). 'monetary' skips the integer counts: fewer flags, but a miscounted "
+            "tally goes unnoticed.",
         )
         audit_action: str = Field(
             "log",
-            description="What to do when unverified figures are found. 'log' (default) = "
-            "record them server-side only and NEVER touch the visible answer (keeps chat "
-            "rendering clean). 'annotate' = append a warning to the message — opt-in only, "
-            "because editing a message's content makes this OWUI build re-render it raw. "
-            "'off' = disable the audit.",
+            description="What to do with unverified figures. 'log' (default) writes them to the "
+            "server log and leaves the answer untouched. 'annotate' appends a warning to the "
+            "message; some Open WebUI versions then re-render the edited message as raw text. "
+            "'off' disables the audit.",
         )
 
     def __init__(self):
@@ -332,24 +359,16 @@ class Filter:
         if not sheets:
             return body  # no spreadsheet -> leave everything untouched
 
-        ids = []
-        for f in sheets:
-            fid = f.get("id") or (f.get("file") or {}).get("id")
-            if fid:
-                ids.append(fid)
+        ids = [fid for fid in (f.get("id") or (f.get("file") or {}).get("id") for f in sheets) if fid]
 
-        # 1) Bypass RAG: keep non-spreadsheet files, drop spreadsheets from retrieval
-        if self.valves.bypass_rag:
+        if self.valves.bypass_rag:  # other attachments still go through retrieval
             body["files"] = [f for f in files if not _is_sheet(f)]
 
-        # 2) Stash ids where the tool can find them (multiple channels for robustness)
-        meta = body.setdefault("metadata", {})
-        meta["analyst_file_ids"] = ids
-        meta["analyst_active"] = True
+        # where the tool looks for the attached ids (it still checks access to each one)
+        body.setdefault("metadata", {})["analyst_file_ids"] = ids
         if isinstance(__metadata__, dict):
             __metadata__["analyst_file_ids"] = ids
 
-        # 3) Enable the tool + native function-calling for this turn
         tool_ids = body.get("tool_ids") or []
         if TOOL_ID not in tool_ids:
             tool_ids.append(TOOL_ID)
@@ -357,7 +376,6 @@ class Filter:
         params = body.setdefault("params", {})
         params["function_calling"] = "native"
 
-        # 4) Inject the contract (flexible answer, numbers only from the tool)
         contract = CONTRACT.format(ids=", ".join(ids) if ids else "(attached)")
         messages = body.get("messages") or []
         messages.insert(0, {"role": "system", "content": contract})
@@ -372,12 +390,10 @@ class Filter:
         __metadata__: Optional[dict] = None,
         **kwargs,
     ) -> dict:
-        """OUTPUT AUDIT: flag any significant figure in the final answer that does not
-        trace back to a SheetProof tool result. Runs only on chats that used the
-        tool; all other chats pass through untouched. Non-destructive (annotate)."""
-        if not (self.valves.enabled and self.valves.audit_enabled):
-            return body
-        if (self.valves.audit_action or "annotate").lower() == "off":
+        """Flag figures in the final answer that do not appear in any SheetProof tool result.
+        Only chats that called the tool are audited; by default findings are only logged."""
+        action = (self.valves.audit_action or "log").lower()
+        if not (self.valves.enabled and self.valves.audit_enabled) or action == "off":
             return body
         try:
             messages = body.get("messages") or []
@@ -388,30 +404,24 @@ class Filter:
             content = asst.get("content") or ""
             output = asst.get("output")
 
-            # ---- VERIFIED CORPUS: numbers from EXECUTED tool results ONLY ----
-            # Harvest from whichever structure this OWUI build exposes at outlet time:
-            #   (a) message.output -> 'function_call_output' blocks (the executed result;
-            #       most reliable, present before content/sources are assembled),
-            #   (b) message.sources -> tool citations,
-            #   (c) inline <details type="tool_calls"> blocks in content.
-            # Reasoning, tool ARGUMENTS, prompts and model narrative are NEVER harvested,
-            # so the model's own computed numbers cannot pollute the verified corpus.
+            # The verified corpus holds numbers from tool results only, never from reasoning,
+            # tool arguments or the answer. Depending on the Open WebUI version the results are
+            # in message.output (function_call_output blocks), message.sources (tool
+            # citations) or <details type="tool_calls"> blocks in the content.
             corpus, had_tool = [], False
             if isinstance(output, list):
-                our_calls = {b.get("call_id") or b.get("id")
-                             for b in output if isinstance(b, dict)
-                             and b.get("type") == "function_call" and b.get("name") in TOOL_FUNCS}
+                our_calls = _tool_call_ids(output)
                 for b in output:
                     if isinstance(b, dict) and b.get("type") == "function_call_output":
                         if our_calls and b.get("call_id") not in our_calls:
-                            continue  # a different tool's output — don't trust as our corpus
+                            continue  # another tool's output
                         had_tool = True
                         corpus.extend(_collect_numbers(_block_text(b.get("output"))))
-            for src in (asst.get("sources") or []):
+            for src in asst.get("sources") or []:
                 sinfo = src.get("source") or {}
                 if TOOL_ID in str(sinfo.get("name") or sinfo.get("id") or "") or sinfo.get("type") == "tool":
                     had_tool = True
-                    for doc in (src.get("document") or []):
+                    for doc in src.get("document") or []:
                         corpus.extend(_collect_numbers(str(doc)))
             for blk in re.findall(r'<details type="tool_calls".*?</details>', content, re.S):
                 if any(fn in blk for fn in TOOL_FUNCS):
@@ -419,18 +429,15 @@ class Filter:
                     res = re.sub(r"<[^>]+>", " ", blk.split("</summary>", 1)[-1])
                     corpus.extend(_collect_numbers(html.unescape(res)))
 
-            # Only audit tool-backed spreadsheet chats; never touch anything else.
             if not had_tool or not corpus:
                 return body
 
-            # ---- AUDIT TARGET: the VISIBLE answer text ONLY ----
-            # Prefer the structured 'message' blocks (the model's spoken narrative); else
-            # fall back to content with ALL <details> (reasoning + tool) stripped out.
-            if isinstance(output, list) and any(
-                isinstance(b, dict) and b.get("type") == "message" for b in output
-            ):
-                answer = " \n".join(_block_text(b.get("content")) for b in output
-                                    if isinstance(b, dict) and b.get("type") == "message")
+            # The visible answer: the 'message' output blocks, else the content without its
+            # <details> (reasoning and tool call) blocks.
+            if isinstance(output, list) and any(isinstance(b, dict) and b.get("type") == "message" for b in output):
+                answer = " \n".join(
+                    _block_text(b.get("content")) for b in output if isinstance(b, dict) and b.get("type") == "message"
+                )
             else:
                 answer = re.sub(r"<details.*?</details>", " ", content, flags=re.S)
 
@@ -444,13 +451,7 @@ class Filter:
                 seen.add(key)
                 flagged.append(raw)
 
-            # Approach-2 backstop: per-entity recorded-value (categorical/text) check.
-            cat_flags = _audit_categorical(output, answer)
-
-            action = (self.valves.audit_action or "log").lower()
             if action == "annotate":
-                # OPT-IN only. Editing message content marks it "edited", which in this
-                # OWUI build re-renders the answer raw. Default is 'log'.
                 if flagged:
                     note = (
                         "\n\n> ⚠️ **Unverified figures detected.** These numbers do not match "
@@ -462,21 +463,19 @@ class Filter:
                         asst["content"] = content + note
                         body["messages"] = messages
             else:
-                # 'log' (default): record server-side, NEVER modify the visible answer.
                 if flagged:
-                    try:
-                        _audit_log.warning(
-                            "spreadsheet audit: %d unverified figure(s) in answer: %s",
-                            len(flagged), "  |  ".join(flagged[:25]))
-                    except Exception:
-                        pass
+                    _audit_log.warning(
+                        "spreadsheet audit: %d unverified figure(s) in answer: %s",
+                        len(flagged),
+                        "  |  ".join(flagged[:25]),
+                    )
+                cat_flags = _audit_categorical(output, answer)
                 if cat_flags:
-                    try:
-                        _audit_log.warning(
-                            "spreadsheet audit: %d recorded-value mismatch(es) vs file rows: %s",
-                            len(cat_flags), " ; ".join(cat_flags[:25]))
-                    except Exception:
-                        pass
+                    _audit_log.warning(
+                        "spreadsheet audit: %d recorded-value mismatch(es) vs file rows: %s",
+                        len(cat_flags),
+                        " ; ".join(cat_flags[:25]),
+                    )
         except Exception:
             return body
         return body

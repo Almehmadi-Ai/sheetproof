@@ -9,13 +9,50 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install ruff (pinned in requirements-dev.txt)
+        run: python -m pip install "$(grep '^ruff==' requirements-dev.txt)"
+
+      - name: Lint
+        run: ruff check --output-format=github .
+
+      - name: Format check
+        run: ruff format --check .
+
   test:
+    name: test (${{ matrix.name }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.11", "3.12"]
+        include:
+          - name: Python 3.11, latest dependencies
+            python-version: "3.11"
+            pins: ""
+          - name: Python 3.12, latest dependencies
+            python-version: "3.12"
+            pins: ""
+          # The versions Open WebUI 0.12.2 ships (pandas 3 with pyarrow-backed strings).
+          - name: Open WebUI 0.12.2 pins
+            python-version: "3.12"
+            pins: "pandas==3.0.3 pyarrow==20.0.0 numpy==2.4.6 openpyxl==3.1.5 xlrd==2.0.2 pydantic==2.13.4"
+          # The oldest supported stack: what Open WebUI 0.5 / 0.6 ship.
+          - name: Open WebUI 0.5 pins
+            python-version: "3.11"
+            pins: "pandas==2.2.3 numpy==2.2.6 openpyxl==3.1.5 xlrd==2.0.1 pydantic==2.10.6"
     steps:
       - uses: actions/checkout@v4
 
@@ -28,21 +65,12 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt pytest
+          python -m pip install -r requirements-dev.txt ${{ matrix.pins }}
 
-      - name: Generate sample data
-        run: python examples/generate_samples.py
+      - name: Sample data is reproducible
+        run: |
+          python examples/generate_samples.py
+          git diff --exit-code -- examples/sample_sales.csv
 
       - name: Run tests
-        run: pytest -q
-
-      - name: Import check (plugins load cleanly outside Open WebUI)
-        run: |
-          python - <<'PY'
-          import importlib.util
-          for name in ("sheetproof", "sheetproof_router"):
-              spec = importlib.util.spec_from_file_location(name, f"{name}.py")
-              mod = importlib.util.module_from_spec(spec)
-              spec.loader.exec_module(mod)
-              print(f"{name}.py imports OK")
-          PY
+        run: python -m pytest -q

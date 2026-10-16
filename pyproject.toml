@@ -1,0 +1,17 @@
+# Tool configuration only. SheetProof ships as two single-file Open WebUI plugins
+# (sheetproof.py and sheetproof_router.py), not as an installable package.
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+# pyflakes, pycodestyle errors and warnings, import order, bugbear, bandit (security), async pitfalls
+select = ["E4", "E7", "E9", "F", "W", "I", "B", "S", "ASYNC"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]  # pytest checks with assert
+"examples/generate_samples.py" = ["S311"]  # seeded sample data, not cryptography
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

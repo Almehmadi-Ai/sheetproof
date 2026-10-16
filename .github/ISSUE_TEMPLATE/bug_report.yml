@@ -11,14 +11,14 @@ body:
     id: version
     attributes:
       label: SheetProof version
-      placeholder: "1.1.0"
+      placeholder: "1.2.0"
     validations:
       required: true
   - type: input
     id: owui
     attributes:
       label: Open WebUI version
-      placeholder: "0.10.2"
+      placeholder: "0.12.2"
     validations:
       required: true
   - type: input

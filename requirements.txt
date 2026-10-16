@@ -1,10 +1,11 @@
 # Dependencies for local development, testing, and the sample generator.
 #
-# Inside Open WebUI you do not need this file: pandas / numpy / openpyxl are declared
-# in the tool header (`requirements:`) and installed automatically, and Open WebUI
-# already ships pydantic. It is listed here because the plugins import it, so a
-# standalone environment (like CI) needs it to load them.
-pandas>=2.0
+# Inside Open WebUI you do not need this file: pandas / numpy / openpyxl / xlrd are declared
+# in the tool header (`requirements:`) and installed automatically (Open WebUI 0.5+ already
+# ships all of them, with pandas 2.2 or newer), and Open WebUI already ships pydantic. It is
+# listed here because the plugins import it, so a standalone environment (like CI) needs it.
+pandas>=2.2
 numpy>=1.24
 openpyxl>=3.1
+xlrd>=2.0
 pydantic>=2.0

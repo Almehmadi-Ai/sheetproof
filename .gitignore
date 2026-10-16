@@ -13,7 +13,7 @@ dist/
 .mypy_cache/
 .ruff_cache/
 
-# Local secrets / scratch (never commit tokens or private drivers)
+# Local secrets and scratch files
 .env
 .env.*
 *.local.py
